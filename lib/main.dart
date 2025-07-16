@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_2/src/cart/presentations/bloc/cart_bloc.dart';
 import 'package:flutter_application_2/src/product/data/datasource/remote/product_remote_data_source.dart';
 import 'package:flutter_application_2/src/product/data/repositories/product_repository_impl.dart';
 import 'package:flutter_application_2/src/product/domain/usecases/get_all_products.dart';
@@ -18,17 +19,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: BlocProvider(
-        create: (context) => ProductBloc(
-          getAllProductsUseCase: GetAllProductsUseCase(
-            ProductRepositoryImpl(
-              remoteDataSource: ProductRemoteDataSourceImpl(
-                client: http.Client(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ProductBloc(
+              getAllProductsUseCase: GetAllProductsUseCase(
+                ProductRepositoryImpl(
+                  remoteDataSource: ProductRemoteDataSourceImpl(
+                    client: http.Client(),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          BlocProvider(
+            create: (context) => CartBloc(),
+          ),
+        ],
         child: const ProductListScreen(),
       ),
     );
