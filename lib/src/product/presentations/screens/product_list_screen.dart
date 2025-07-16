@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_2/src/cart/presentations/bloc/cart_bloc.dart';
+import 'package:flutter_application_2/src/cart/presentations/bloc/cart_event.dart';
+import 'package:flutter_application_2/src/cart/presentations/bloc/cart_state.dart';
+import 'package:flutter_application_2/src/cart/presentations/screens/cart_screen.dart';
 import 'package:flutter_application_2/src/product/presentations/bloc/product_bloc.dart';
 import 'package:flutter_application_2/src/product/presentations/bloc/product_event.dart';
 import 'package:flutter_application_2/src/product/presentations/bloc/product_state.dart';
@@ -23,6 +27,61 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
+        actions: [
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded) {
+                return Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const CartScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${state.items.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CartScreen(),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
@@ -37,6 +96,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   leading: Image.network(product.image),
                   title: Text(product.title),
                   subtitle: Text('\$${product.price}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.add_shopping_cart),
+                    onPressed: () {
+                      context.read<CartBloc>().add(AddToCart(product));
+                    },
+                  ),
                 );
               },
             );
