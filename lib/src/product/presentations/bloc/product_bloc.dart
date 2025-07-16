@@ -9,7 +9,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc({required this.getAllProductsUseCase}) : super(ProductInitial()) {
     on<GetAllProducts>((event, emit) async {
       emit(ProductLoading());
-      final failureOrProducts = await getAllProductsUseCase();
+      final failureOrProducts = await getAllProductsUseCase(NoParams());
       failureOrProducts.fold(
         (failure) => emit(ProductError('Failed to fetch products')),
         (products) => emit(ProductLoaded(products)),

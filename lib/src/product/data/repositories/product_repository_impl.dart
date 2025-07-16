@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter_application_2/src/core/errors/exceptions.dart';
 import 'package:flutter_application_2/src/core/errors/failures.dart';
 import 'package:flutter_application_2/src/product/data/datasource/remote/product_remote_data_source.dart';
@@ -11,52 +11,52 @@ class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<ProductModel>>> getAllProducts() async {
+  Future<dartz.Either<Failure, List<ProductModel>>> getAllProducts() async {
     try {
       final remoteProducts = await remoteDataSource.getAllProducts();
-      return Right(remoteProducts);
+      return dartz.Right(remoteProducts);
     } on ServerException {
-      return Left(ServerFailure());
+      return dartz.Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, ProductModel>> getProductById(int id) async {
+  Future<dartz.Either<Failure, ProductModel>> getProductById(int id) async {
     try {
       final remoteProduct = await remoteDataSource.getProductById(id);
-      return Right(remoteProduct);
+      return dartz.Right(remoteProduct);
     } on ServerException {
-      return Left(ServerFailure());
+      return dartz.Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, ProductModel>> addProduct(ProductModel product) async {
+  Future<dartz.Either<Failure, ProductModel>> addProduct(ProductModel product) async {
     try {
       final remoteProduct = await remoteDataSource.addProduct(product);
-      return Right(remoteProduct);
+      return dartz.Right(remoteProduct);
     } on ServerException {
-      return Left(ServerFailure());
+      return dartz.Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, ProductModel>> updateProduct(ProductModel product) async {
+  Future<dartz.Either<Failure, ProductModel>> updateProduct(ProductModel product) async {
     try {
       final remoteProduct = await remoteDataSource.updateProduct(product);
-      return Right(remoteProduct);
+      return dartz.Right(remoteProduct);
     } on ServerException {
-      return Left(ServerFailure());
+      return dartz.Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> deleteProduct(int id) async {
+  Future<dartz.Either<Failure, void>> deleteProduct(int id) async {
     try {
       await remoteDataSource.deleteProduct(id);
-      return const Right(null);
+      return const dartz.Right(null);
     } on ServerException {
-      return Left(ServerFailure());
+      return dartz.Left(ServerFailure());
     }
   }
 }
