@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_2/src/core/usecase/usecase.dart';
 import 'package:flutter_application_2/src/product/domain/usecases/get_all_products.dart';
 import 'package:flutter_application_2/src/product/presentations/bloc/product_event.dart';
 import 'package:flutter_application_2/src/product/presentations/bloc/product_state.dart';
